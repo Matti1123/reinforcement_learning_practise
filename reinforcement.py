@@ -32,8 +32,10 @@ def train_reinforce(env, policy, episodes=500, seed=42, gamma=0.99, batch_size=1
             action = distribution.sample()
             log_probs.append(distribution.log_prob(action))
             observation, reward, terminated, truncated, info = env.step(action.item())
-            # Zuerst lernen wir mit dem Standard-Reward: +1 pro Schritt.
-            rewards.append(reward)
+            # In der Mitte bleibt der Reward 1; am Rand beträgt er etwa 0,5.
+            distance = min(abs(float(observation[0])) / env.unwrapped.x_threshold, 1.0)
+            training_reward = reward - 0.5 * distance**2
+            rewards.append(training_reward)
             if terminated or truncated:
                 break
 
@@ -42,7 +44,7 @@ def train_reinforce(env, policy, episodes=500, seed=42, gamma=0.99, batch_size=1
         episode_reward = sum(rewards)
         reward_history.append(episode_reward)
         recent_rewards.append(episode_reward)
-        print(f"Episode {episode + 1}: Reward {episode_reward:.0f}")
+        print(f"Episode {episode + 1}: Trainings-Reward {episode_reward:.1f}, Schritte {len(rewards)}")
 
         if len(batch_returns) == batch_size or episode == episodes - 1:
             returns = torch.cat(batch_returns)

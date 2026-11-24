@@ -23,9 +23,9 @@ def plot_rewards(rewards, path="outputs/reward_curve.png", window=20):
     ax.set(
         title="CartPole: Lernkurve mit REINFORCE",
         xlabel="Trainingsepisode",
-        ylabel="Gesamter Reward (Standard-Reward = Anzahl Schritte)",
+        ylabel="Gesamter Trainings-Reward (inkl. Position)",
     )
-    ax.axhline(500, color="gray", linestyle="--", label="Zeitlimit: 500 Schritte")
+    ax.axhline(500, color="gray", linestyle="--", label="Theoretisches Maximum: 500")
     ax.grid(alpha=0.2)
     ax.legend()
     figure.savefig(path, dpi=150)

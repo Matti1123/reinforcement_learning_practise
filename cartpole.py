@@ -63,13 +63,14 @@ def main():
     policy_dir = Path("policies")
     policy_dir.mkdir(exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    policy_path = policy_dir / f"policy_{timestamp}_{uuid4().hex[:8]}.pt"
+    run_id = f"{timestamp}_{uuid4().hex[:8]}"
+    policy_path = policy_dir / f"policy_{run_id}.pt"
     torch.save(policy.state_dict(), policy_path)
     print(f"Policy gespeichert: {policy_path}")
 
     # plot_rewards (plotting.py): Speichert den Reward-Verlauf und einen
     # gleitenden Durchschnitt über 20 Episoden als Bild, auch ohne Fenster.
-    plot_path = plot_rewards(rewards)
+    plot_path = plot_rewards(rewards, path=f"outputs/reward_curve_{run_id}.png")
     print(f"Lernkurve gespeichert: {plot_path}")
 
     if not args.no_render:
