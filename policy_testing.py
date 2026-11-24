@@ -18,7 +18,7 @@ def main():
         default=Path(__file__).resolve().parent / "policies/policy_20261124_214753_d3e62823.pt",
         help="Pfad zur Policy-Datei (Standard: Policy von 21:47)",
     )
-    parser.add_argument("--episodes", type=int, default=100, help="Anzahl Testepisoden (Standard: 50)")
+    parser.add_argument("--episodes", type=int, default=0, help="Anzahl Testepisoden (Standard: 50)")
     parser.add_argument("--seed", type=int, default=10000, help="Erster Test-Seed (Standard: 10000)")
     args = parser.parse_args()
     if args.episodes < 1:
