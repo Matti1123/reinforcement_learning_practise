@@ -1,12 +1,16 @@
 """Lokaler MCP-Server zum Auswerten gespeicherter CartPole-Policies."""
 
 from pathlib import Path
+import sys
+
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(PROJECT_DIR))
 
 from mcp.server.fastmcp import FastMCP
 
 from policy_testing import test_policy
 
-POLICY_DIR = Path(__file__).resolve().parent / "policies"
+POLICY_DIR = PROJECT_DIR / "policies"
 server = FastMCP("CartPole Policy Testing")
 
 
