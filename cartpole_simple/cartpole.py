@@ -60,7 +60,8 @@ def main():
         env.close()
 
     # Jede Trainingsausführung erhält einen eigenen Dateinamen.
-    policy_dir = Path("policies")
+    experiment_dir = Path(__file__).resolve().parent
+    policy_dir = experiment_dir / "policies"
     policy_dir.mkdir(exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_id = f"{timestamp}_{uuid4().hex[:8]}"
@@ -70,7 +71,7 @@ def main():
 
     # plot_rewards (plotting.py): Speichert den Reward-Verlauf und einen
     # gleitenden Durchschnitt über 20 Episoden als Bild, auch ohne Fenster.
-    plot_path = plot_rewards(rewards, path=f"outputs/reward_curve_{run_id}.png")
+    plot_path = plot_rewards(rewards, path=experiment_dir / "outputs" / f"reward_curve_{run_id}.png")
     print(f"Lernkurve gespeichert: {plot_path}")
 
     if not args.no_render:
