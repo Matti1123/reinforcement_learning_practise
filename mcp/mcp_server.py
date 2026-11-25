@@ -11,13 +11,13 @@ from mcp.server.fastmcp import FastMCP
 
 from policy_testing import test_policy
 
-POLICY_DIR = SIMPLE_DIR / "policies"
+POLICY_DIR = PROJECT_DIR / "policies"
 server = FastMCP("CartPole Policy Testing")
 
 
 @server.tool()
 def policy_testen(dateiname: str, episoden: int = 50, seed: int = 10000) -> dict:
-    """Testet eine .pt-Datei aus cartpole_simple/policies/; liefert Testkennzahlen.
+    """Testet eine CartPole-Simple-Policy aus policies/; liefert Testkennzahlen.
 
     dateiname ist der Dateiname ohne Ordner. episoden liegt zwischen 1 und 500.
     Die Seeds beginnen bei seed und steigen pro Episode um eins.

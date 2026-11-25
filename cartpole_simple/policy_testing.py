@@ -4,11 +4,14 @@ import argparse
 import math
 from pathlib import Path
 from statistics import mean
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import gymnasium as gym
 import torch
 
-from policy import Policy
+from modelle.policy import Policy
 
 
 def test_policy(path, episodes=50, seed=10000):
@@ -58,7 +61,7 @@ def test_policy(path, episodes=50, seed=10000):
 def main():
     parser = argparse.ArgumentParser(description="Gespeicherte CartPole-Policy testen")
     parser.add_argument("policy", nargs="?", type=Path,
-                        default=Path(__file__).resolve().parent / "policies/policy_20261124_214753_d3e62823.pt")
+                        default=Path(__file__).resolve().parent.parent / "policies/cartpole_simple_mit_mitten_reward.pt")
     parser.add_argument("--episodes", type=int, default=0, help="Anzahl Testepisoden")
     parser.add_argument("--seed", type=int, default=10000, help="Erster Test-Seed")
     args = parser.parse_args()

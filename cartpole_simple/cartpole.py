@@ -2,11 +2,14 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import gymnasium as gym
 import torch
 
-from policy import Policy
+from modelle.policy import Policy
 from plotting import plot_rewards
 from reinforcement import evaluate_policy, train_reinforce
 
@@ -61,7 +64,7 @@ def main():
 
     # Jede Trainingsausführung erhält einen eigenen Dateinamen.
     experiment_dir = Path(__file__).resolve().parent
-    policy_dir = experiment_dir / "policies"
+    policy_dir = experiment_dir.parent / "policies"
     policy_dir.mkdir(exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_id = f"{timestamp}_{uuid4().hex[:8]}"

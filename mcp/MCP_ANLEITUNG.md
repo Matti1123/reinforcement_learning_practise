@@ -1,6 +1,6 @@
 # CartPole als MCP-Tool
 
-Das lokale Tool `policy_testen` testet eine Policy aus `cartpole_simple/policies/`. Es gibt
+Das lokale Tool `policy_testen` testet eine Policy aus `policies/`. Es gibt
 unter anderem Erfolgsrate, mittlere Dauer, Abstand zur Mitte und Winkel aus.
 Es trainiert keine Policy und verändert keine Dateien.
 
@@ -26,8 +26,8 @@ Argument: /home/flets/reinforcement_learning_medtech/mcp/mcp_server.py
 Eine bestehende MCP-Konfiguration mit dem alten Pfad muss entsprechend
 aktualisiert und der Agent beziehungsweise die MCP-Verbindung neu gestartet werden.
 
-Beispiel für einen Tool-Aufruf: Dateiname `policy_20261124_214753_d3e62823.pt`,
+Beispiel für einen Tool-Aufruf: Dateiname `cartpole_simple_mit_mitten_reward.pt`,
 `episoden` 50 und `seed` 10000. Der Agent benötigt Zugriff auf den lokalen
-Ordner `cartpole_simple/policies/`, dessen Dateien nicht in Git gespeichert werden.
+Ordner `policies/`, dessen Dateien nicht in Git gespeichert werden.
 Das Tool unterstützt bisher nur `cartpole_simple`. Nach Änderungen am Server
 die MCP-Verbindung neu starten, damit der neue Code geladen wird.
