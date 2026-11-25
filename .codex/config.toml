@@ -1,0 +1,3 @@
+[mcp_servers.cartpole]
+command = "/home/flets/reinforcement_learning_medtech/.venv/bin/python"
+args = ["/home/flets/reinforcement_learning_medtech/mcp/mcp_server.py"]
