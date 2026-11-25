@@ -11,6 +11,7 @@ import torch
 PROJEKT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJEKT))
 from modelle.policy import Policy
+from modelle.gelenk_policy import GelenkPolicy, beobachtung
 
 
 class Doppelpendel:
@@ -69,7 +70,7 @@ def main():
     parser.add_argument("--headless", action="store_true", help="Ohne Fenster simulieren")
     parser.add_argument("--steps", type=int, default=None, help="Anzahl Simulationsschritte (240 pro Sekunde)")
     parser.add_argument("--steuerung", choices=("policy", "zufall"), default="policy")
-    parser.add_argument("--policy", type=Path, default=PROJEKT / "policies/cartpole_simple_mit_mitten_reward.pt", help="Pfad zu einer CartPole-Simple-Policy")
+    parser.add_argument("--policy", type=Path, default=PROJEKT / "policies/cartpole_simple_mit_mitten_reward.pt", help="Pfad zur Simple- oder Gelenk-Policy")
     args = parser.parse_args()
     if args.steps is not None and args.steps < 1:
         parser.error("--steps muss mindestens 1 sein")
@@ -79,16 +80,23 @@ def main():
     simulation = Doppelpendel(args.seed)
     policy = None
     if args.steuerung == "policy":
-        policy = Policy()
         try:
-            policy.load_state_dict(torch.load(args.policy, map_location="cpu", weights_only=True))
-        except (OSError, RuntimeError, ValueError) as error:
+            gewichte = torch.load(args.policy, map_location="cpu", weights_only=True)
+            eingaben = gewichte["network.0.weight"].shape[1]
+            if eingaben not in (4, 6):
+                raise ValueError(f"Nicht unterstützte Eingabegröße: {eingaben}")
+            policy = Policy() if eingaben == 4 else GelenkPolicy()
+            policy.load_state_dict(gewichte)
+        except (OSError, RuntimeError, ValueError, KeyError) as error:
             parser.error(f"Policy konnte nicht geladen werden: {error}")
         policy.eval()
 
     def naechste_aktion():
         if policy is None:
             return simulation.zufallsaktion()
+        if isinstance(policy, GelenkPolicy):
+            with torch.no_grad():
+                return 1 if policy(beobachtung(simulation.zustand)).probs.argmax().item() else -1
         x, winkel, _, vx, winkelgeschwindigkeit, _ = simulation.zustand
         # CartPole-v1 erwartet Winkel im Bereich um die aufrechte Stellung.
         winkel = (winkel + math.pi) % (2 * math.pi) - math.pi
